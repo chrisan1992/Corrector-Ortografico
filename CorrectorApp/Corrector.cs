@@ -22,6 +22,7 @@ namespace CorrectorApp
         private static int[,] matriz_eliminaciones = new int[43, 43];
         private static int[,] matriz_sustituciones = new int[43, 43];
         private static int[,] matriz_transposiciones = new int[43, 43];
+        private readonly String[] encabezado_matriz = { "0", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "á", "é", "í", "ó", "ú", "ñ", "ü", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
         /// <summary>
         /// Default Constructor
@@ -167,8 +168,8 @@ namespace CorrectorApp
 
             while (!finishedBW1 || !finishedBW2)
             { }
-            palabras.Concat(dist1_1);
-            palabras.Concat(dist1_2);
+            palabras.AddRange(dist1_1);
+            palabras.AddRange(dist1_2);
 
             return palabras;
         }
@@ -438,6 +439,21 @@ namespace CorrectorApp
             { }
 
             Console.WriteLine("Finished with the matrices");
+        }
+
+
+        /* PENDIENTE */
+        // Buscar los bigramas más comunes para esa palabra
+        // Multiplicar los valores de las matrices con las frecuencias y conteos   
+        public double BuscarFrecuenciaDelBigrama(String palabra, String palabraAnterior)
+        {
+            var key = palabraAnterior + "," + palabra;
+            if(frec_bigramas.ContainsKey(key))
+            {
+                return frec_bigramas[key];
+            }
+
+            return 0.4; // Stupid backoff
         }
     }
 }
