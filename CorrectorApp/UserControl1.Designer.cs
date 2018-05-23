@@ -38,40 +38,42 @@
             // txtOriginal
             // 
             this.txtOriginal.BackColor = System.Drawing.SystemColors.Control;
-            this.txtOriginal.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtOriginal.Location = new System.Drawing.Point(40, 62);
+            this.txtOriginal.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtOriginal.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtOriginal.Location = new System.Drawing.Point(18, 43);
             this.txtOriginal.Multiline = true;
             this.txtOriginal.Name = "txtOriginal";
-            this.txtOriginal.Size = new System.Drawing.Size(255, 156);
+            this.txtOriginal.Size = new System.Drawing.Size(590, 90);
             this.txtOriginal.TabIndex = 0;
             // 
             // txtCorregido
             // 
             this.txtCorregido.BackColor = System.Drawing.SystemColors.Control;
-            this.txtCorregido.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCorregido.Location = new System.Drawing.Point(335, 62);
+            this.txtCorregido.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtCorregido.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCorregido.Location = new System.Drawing.Point(18, 182);
             this.txtCorregido.Multiline = true;
             this.txtCorregido.Name = "txtCorregido";
-            this.txtCorregido.Size = new System.Drawing.Size(255, 156);
+            this.txtCorregido.Size = new System.Drawing.Size(590, 90);
             this.txtCorregido.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(40, 30);
+            this.label1.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(18, 11);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(163, 25);
+            this.label1.Size = new System.Drawing.Size(180, 25);
             this.label1.TabIndex = 2;
             this.label1.Text = "Oracion original";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(338, 30);
+            this.label2.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(18, 154);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(183, 25);
+            this.label2.Size = new System.Drawing.Size(201, 25);
             this.label2.TabIndex = 3;
             this.label2.Text = "Oracion corregida";
             // 

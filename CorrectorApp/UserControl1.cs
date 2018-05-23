@@ -12,12 +12,12 @@ namespace CorrectorApp
 {
     public partial class UserControl1 : UserControl
     {
-        public static Corrector corrector;
+        private Corrector corrector;
         
         public UserControl1()
         {
             InitializeComponent();
-            corrector = new Corrector();
+            //corrector = new Corrector();
         }
 
         private void btnCorregir_Click(object sender, EventArgs e)
@@ -27,18 +27,15 @@ namespace CorrectorApp
             oracion = txtOriginal.Text.Split(' ', '\t').ToList();
             foreach (String palabra in oracion)
             {
-                if (corrector.PalabraExiste(palabra))
-                {
-                    //palabra si se encuentra en el diccionario
-                }
-                else
-                {
-                    List<String> palabrasE1 = PalabraDistancia1(palabra);
-                }
-            }
-            
-        }
+                if (!corrector.PalabraExiste(palabra.ToLower()))
+                {                
+                    List<String> palabrasE1 = corrector.PalabrasDistancia1(palabra.ToLower());
 
-        
+                    /* PENDIENTE */
+                    // Buscar los bigramas más comunes para esa palabra
+                    // Multiplicar los valores de las matrices con las frecuencias y conteos                    
+                }
+            }            
+        }        
     }
 }

@@ -20,13 +20,17 @@ namespace CorrectorApp
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
 
-        public static UserControl1 controlCorregir;
+        public static UserControl1 controlCorregir = new UserControl1();
 
 
         public Form1()
         {
             InitializeComponent();
-            controlCorregir = new UserControl1();
+            //sets the first screen to the user
+            this.btnCorrector.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.btnConfig.ForeColor = System.Drawing.Color.White;
+            this.panelPrincipal.Controls.Clear();
+            this.panelPrincipal.Controls.Add(controlCorregir);
         }
 
         private void labelClose_Click(object sender, EventArgs e)
@@ -55,7 +59,7 @@ namespace CorrectorApp
 
         private void btnCorrector_Click(object sender, EventArgs e)
         {
-            this.btnCorrector.ForeColor = System.Drawing.Color.SteelBlue;
+            this.btnCorrector.ForeColor = System.Drawing.Color.DodgerBlue;
             this.btnConfig.ForeColor = System.Drawing.Color.White;
             this.panelPrincipal.Controls.Clear();
             this.panelPrincipal.Controls.Add(controlCorregir);
@@ -64,9 +68,9 @@ namespace CorrectorApp
         private void btnConfig_Click(object sender, EventArgs e)
         {
             this.btnCorrector.ForeColor = System.Drawing.Color.White;
-            this.btnConfig.ForeColor = System.Drawing.Color.SteelBlue;
+            this.btnConfig.ForeColor = System.Drawing.Color.DodgerBlue;
             this.panelPrincipal.Controls.Clear();
-
+            
         }
     }
 }
