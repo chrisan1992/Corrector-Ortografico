@@ -531,8 +531,8 @@ namespace CorrectorApp
         {
             // Tuple<Palabra con error, Palabra candidata, Operacion, Posicion>
             Double prob = 0;
-            int ocurrencias = 0;
-            int conteoBigramaLetra = 0;
+            double ocurrencias = 0;
+            double conteoBigramaLetra = 0;
             String caracterX = "";
             String caracterY = "";
 
@@ -550,7 +550,7 @@ namespace CorrectorApp
 
                     ocurrencias = matriz_transposiciones[encabezado_matriz.IndexOf(caracterY), encabezado_matriz.IndexOf(caracterX)];
                     conteoBigramaLetra = ObtenerConteoBigramaLetra(caracterX + caracterY);
-                    prob = ocurrencias + 1 / conteoBigramaLetra;
+                    prob = (double)((ocurrencias + 1) / conteoBigramaLetra);
                     break;
             }
             

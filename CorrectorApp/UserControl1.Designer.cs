@@ -39,7 +39,7 @@
             // 
             this.txtOriginal.BackColor = System.Drawing.SystemColors.Control;
             this.txtOriginal.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtOriginal.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtOriginal.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtOriginal.Location = new System.Drawing.Point(18, 43);
             this.txtOriginal.Multiline = true;
             this.txtOriginal.Name = "txtOriginal";
@@ -50,40 +50,40 @@
             // 
             this.txtCorregido.BackColor = System.Drawing.SystemColors.Control;
             this.txtCorregido.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtCorregido.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCorregido.Enabled = false;
+            this.txtCorregido.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCorregido.Location = new System.Drawing.Point(18, 182);
             this.txtCorregido.Multiline = true;
             this.txtCorregido.Name = "txtCorregido";
             this.txtCorregido.Size = new System.Drawing.Size(590, 90);
             this.txtCorregido.TabIndex = 1;
-            this.txtCorregido.Enabled = false;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(18, 11);
+            this.label1.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(21, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(180, 25);
+            this.label1.Size = new System.Drawing.Size(137, 18);
             this.label1.TabIndex = 2;
             this.label1.Text = "Oración original";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(18, 154);
+            this.label2.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(21, 156);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(201, 25);
+            this.label2.Size = new System.Drawing.Size(151, 18);
             this.label2.TabIndex = 3;
             this.label2.Text = "Oración corregida";
             // 
             // btnCorregir
             // 
-            this.btnCorregir.BackColor = System.Drawing.Color.SteelBlue;
+            this.btnCorregir.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnCorregir.FlatAppearance.BorderSize = 0;
             this.btnCorregir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCorregir.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCorregir.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCorregir.ForeColor = System.Drawing.Color.White;
             this.btnCorregir.Location = new System.Drawing.Point(445, 370);
             this.btnCorregir.Name = "btnCorregir";
@@ -92,6 +92,7 @@
             this.btnCorregir.Text = "Corregir";
             this.btnCorregir.UseVisualStyleBackColor = false;
             this.btnCorregir.Click += new System.EventHandler(this.btnCorregir_Click);
+            this.btnCorregir.Paint += new System.Windows.Forms.PaintEventHandler(this.btnCorregir_Paint);
             // 
             // UserControl1
             // 
