@@ -56,6 +56,7 @@
             this.txtCorregido.Name = "txtCorregido";
             this.txtCorregido.Size = new System.Drawing.Size(590, 90);
             this.txtCorregido.TabIndex = 1;
+            this.txtCorregido.Enabled = false;
             // 
             // label1
             // 
@@ -65,7 +66,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(180, 25);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Oracion original";
+            this.label1.Text = "Oración original";
             // 
             // label2
             // 
@@ -75,7 +76,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(201, 25);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Oracion corregida";
+            this.label2.Text = "Oración corregida";
             // 
             // btnCorregir
             // 

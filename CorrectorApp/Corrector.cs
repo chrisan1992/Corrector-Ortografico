@@ -22,7 +22,7 @@ namespace CorrectorApp
         private static int[,] matriz_eliminaciones = new int[43, 43];
         private static int[,] matriz_sustituciones = new int[43, 43];
         private static int[,] matriz_transposiciones = new int[43, 43];
-        private readonly String[] encabezado_matriz = { "0", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "á", "é", "í", "ó", "ú", "ñ", "ü", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+        private readonly List<String> encabezado_matriz = new List<String>{ "0", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "á", "é", "í", "ó", "ú", "ñ", "ü", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
         /// <summary>
         /// Default Constructor
@@ -74,7 +74,6 @@ namespace CorrectorApp
                     .Replace("&quot;", "")
                     .Replace("&quot", "")
                     ;
-                //Console.WriteLine(corpus[i]);
             }
 
             return corpus;
@@ -124,13 +123,14 @@ namespace CorrectorApp
         /// <summary>
         /// buscar las palabras que esten en el diccionario y que esten a disctancia de edicion 1
         /// </summary>
-        /// <param name="palabra"></param>
-        public List<String> PalabrasDistancia1(String palabra)
+        /// <param name="palabraError"></param>
+        public List<Tuple<String, String, String, int>> PalabrasDistancia1(String palabraError)
         {
-            List<String> palabras = new List<String>();
+            // Tuple<Palabra con error, Palabra candidata, Operacion, Posicion>
+            List<Tuple<String, String, String, int>> palabras = new List<Tuple<String, String, String, int>>();
             int middle = diccionario.Count / 2;//mitad del archivo
-            List<String> dist1_1 = new List<String>();
-            List<String> dist1_2 = new List<String>();
+            List<Tuple<String, String, String, int>> dist1_1 = new List<Tuple<String, String, String, int>>();
+            List<Tuple<String, String, String, int>> dist1_2 = new List<Tuple<String, String, String, int>>();
 
             BackgroundWorker bw1 = new BackgroundWorker();
             Boolean finishedBW1 = false;
@@ -139,10 +139,40 @@ namespace CorrectorApp
                 //busca palabras distancia 1 en la primera mitad
                 for (int i = 0; i < middle; ++i)
                 {
-                    if (EditDistance(palabra, diccionario[i]) == 1)
+                    String palabraDistancia1 = diccionario[i];
+                    if (EditDistance(palabraError, palabraDistancia1) == 1)
                     {
-                        //palabra a distancia 1
-                        dist1_1.Add(diccionario[i]);
+                        String operacion = "";
+                        int posicionDiferencia = 0;
+                        if (palabraError.Count() > palabraDistancia1.Count())
+                        {
+                            operacion = "Insercion";
+                            posicionDiferencia = palabraError.Zip(palabraDistancia1, (c1, c2) => c1 == c2).TakeWhile(b => b).Count();
+                        }
+                        else if (palabraError.Count() < palabraDistancia1.Count())
+                        {
+                            operacion = "Eliminacion";
+                            posicionDiferencia = palabraError.Zip(palabraDistancia1, (c1, c2) => c1 == c2).TakeWhile(b => b).Count();
+                        }
+                        else
+                        {
+                            posicionDiferencia = palabraError.Zip(palabraDistancia1, (c1, c2) => c1 == c2).TakeWhile(b => b).Count();
+
+                            if (posicionDiferencia != palabraError.Count() - 1)
+                            {
+                                operacion = (palabraError[posicionDiferencia] == palabraDistancia1[posicionDiferencia + 1]
+                                        && palabraError[posicionDiferencia + 1] == palabraDistancia1[posicionDiferencia])
+                                            ? "Transposicion"
+                                            : "Sustitucion";
+                            }
+                            else
+                            {
+                                operacion = "Sustitucion";
+                            }
+                        }
+
+                        var tupla = new Tuple<String, String, String, int>(palabraError, palabraDistancia1, operacion, posicionDiferencia);
+                        dist1_1.Add(tupla);
                     }
                 }
                 finishedBW1 = true;
@@ -156,10 +186,41 @@ namespace CorrectorApp
                 //busca palabras distancia 1 en la segunda mitad
                 for (int i = middle; i < diccionario.Count(); ++i)
                 {
-                    if (EditDistance(palabra, diccionario[i]) == 1)
+                    String palabraDistancia1 = diccionario[i];
+                    if (EditDistance(palabraError, palabraDistancia1) == 1)
                     {
-                        //palabra a distancia 1
-                        dist1_2.Add(diccionario[i]);
+                        String operacion = "";
+                        
+                        int posicionDiferencia = 0;
+                        if (palabraError.Count() > palabraDistancia1.Count())
+                        {
+                            operacion = "Insercion";
+                            posicionDiferencia = palabraError.Zip(palabraDistancia1, (c1, c2) => c1 == c2).TakeWhile(b => b).Count();
+                        }
+                        else if (palabraError.Count() < palabraDistancia1.Count())
+                        {
+                            operacion = "Eliminacion";
+                            posicionDiferencia = palabraError.Zip(palabraDistancia1, (c1, c2) => c1 == c2).TakeWhile(b => b).Count();
+                        }
+                        else
+                        {
+                            posicionDiferencia = palabraError.Zip(palabraDistancia1, (c1, c2) => c1 == c2).TakeWhile(b => b).Count();
+
+                            if (posicionDiferencia != palabraError.Count() - 1)
+                            {
+                                operacion = (palabraError[posicionDiferencia] == palabraDistancia1[posicionDiferencia + 1]
+                                        && palabraError[posicionDiferencia + 1] == palabraDistancia1[posicionDiferencia])
+                                            ? "Transposicion"
+                                            : "Sustitucion";
+                            }
+                            else
+                            {
+                                operacion = "Sustitucion";
+                            }
+                        }
+
+                        var tupla = new Tuple<String, String, String, int>(palabraError, palabraDistancia1, operacion, posicionDiferencia);
+                        dist1_2.Add(tupla);
                     }
                 }
                 finishedBW2 = true;
@@ -272,7 +333,7 @@ namespace CorrectorApp
             Boolean finishedBW2 = false;
             bw2.DoWork += (senderbw2, arg) =>
             {
-                var biqg = File.ReadAllLines(@"conteos_bi_qgramas.csv").ToList();
+                var biqg = File.ReadAllLines(@"conteos_bi_qgramas.txt").ToList();
 
                 if (biqg != null)
                 {
@@ -440,20 +501,105 @@ namespace CorrectorApp
 
             Console.WriteLine("Finished with the matrices");
         }
-
-
-        /* PENDIENTE */
-        // Buscar los bigramas más comunes para esa palabra
-        // Multiplicar los valores de las matrices con las frecuencias y conteos   
-        public double BuscarFrecuenciaDelBigrama(String palabra, String palabraAnterior)
+  
+        private Double ObtenerFrecuenciaBigrama(String bigrama)
         {
-            var key = palabraAnterior + "," + palabra;
-            if(frec_bigramas.ContainsKey(key))
+            return frec_bigramas.ContainsKey(bigrama) ? frec_bigramas[bigrama] : 0.4;
+        }
+
+        private Double ObtenerFrecuenciaUnigrama(String unigrama)
+        {
+            return frec_unigramas.ContainsKey(unigrama) ? frec_unigramas[unigrama] : 0.4;
+        }
+
+        private int ObtenerConteoBigramaLetra(String bigramaLetra)
+        {
+            return conteo_bi_qgramas.ContainsKey(bigramaLetra) ? conteo_bi_qgramas[bigramaLetra] : 0;
+        }
+
+        private int ObtenerConteoUnigramaLetra(String unigramaLetra)
+        {
+            return conteo_uni_qgramas.ContainsKey(unigramaLetra) ? conteo_uni_qgramas[unigramaLetra] : 0;
+        }
+
+        private String ObtenerCandidatoMayorProbabilidad(Dictionary<String, Double> candidatosConProbabilidad)
+        {
+            return candidatosConProbabilidad.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
+        }
+
+        private Double ObtenerProbabilidadMatriz(Tuple<String, String, String, int> tupla)
+        {
+            // Tuple<Palabra con error, Palabra candidata, Operacion, Posicion>
+            Double prob = 0;
+            int ocurrencias = 0;
+            int conteoBigramaLetra = 0;
+            String caracterX = "";
+            String caracterY = "";
+
+            switch (tupla.Item3)
             {
-                return frec_bigramas[key];
+                case "Eliminacion":
+                    break;
+                case "Insercion":
+                    break;
+                case "Sustitucion":
+                    break;
+                case "Transposicion":
+                    caracterX = tupla.Item2[tupla.Item4].ToString();
+                    caracterY = tupla.Item2[tupla.Item4 + 1].ToString();
+
+                    ocurrencias = matriz_transposiciones[encabezado_matriz.IndexOf(caracterY), encabezado_matriz.IndexOf(caracterX)];
+                    conteoBigramaLetra = ObtenerConteoBigramaLetra(caracterX + caracterY);
+                    prob = ocurrencias + 1 / conteoBigramaLetra;
+                    break;
+            }
+            
+            return prob;
+        }
+        
+        public String ObtenerOracionCorregida(String oracionConErrores)
+        {
+            string fraseCorregida = "";
+            
+            List<String> oracion = new List<String>();           
+            oracion = oracionConErrores.Split(' ', '\t').ToList();
+            String palabra = "";
+
+            for (int i = 0; i < oracion.Count(); i++)
+            {
+                palabra = oracion[i];
+
+                if (!PalabraExiste(palabra))
+                {
+                    // Buscar las palabras a distancia 1 (candidatos). Tuple<Palabra, Candidato, Operacion, Posicion>
+                    List <Tuple<String, String, String, int>> candidatos = PalabrasDistancia1(palabra);
+                    Dictionary<String, Double> candidatosConProbabilidad = new Dictionary<String, Double>();
+
+                    foreach (Tuple<String, String, String, int> tuplaCandidato in candidatos)
+                    {
+                        String candidato = tuplaCandidato.Item2;
+                        String palabraAnterior = i == 0 ? "<s>" : oracion[i - 1];
+                        String palabraPosterior = i == oracion.Count() - 1 ? "</s>" : oracion[i + 1];
+                        String bigramaAnterior = palabraAnterior + "," + candidato;                        
+                        String bigramaPosterior = candidato + "," + palabraPosterior;
+
+                        Double probUnigramaCandidato = ObtenerFrecuenciaUnigrama(candidato);
+                        Double probBigramaAnterior = ObtenerFrecuenciaBigrama(bigramaAnterior);
+                        Double probBigramaPosterior = ObtenerFrecuenciaBigrama(bigramaPosterior);
+                        Double probMatriz = ObtenerProbabilidadMatriz(tuplaCandidato);
+
+                        Double probCandidato = probUnigramaCandidato * probBigramaAnterior * probBigramaPosterior * probMatriz;
+
+                        candidatosConProbabilidad.Add(candidato, probCandidato);
+                    }
+
+                    palabra = ObtenerCandidatoMayorProbabilidad(candidatosConProbabilidad);
+                }
+
+                fraseCorregida += palabra + " ";
             }
 
-            return 0.4; // Stupid backoff
+            return fraseCorregida;
         }
     }
 }
