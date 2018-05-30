@@ -14,15 +14,13 @@ namespace CorrectorApp
         private static List<String> diccionario = File.ReadAllLines(@"diccionario.txt").ToList();
         private static Dictionary<String, double> frec_unigramas = new Dictionary<String, double>();
         private static Dictionary<String, double> frec_bigramas = new Dictionary<String, double>();
-        private static Dictionary<String, int> conteo_unigramas = new Dictionary<String, int>();
-        private static Dictionary<String, int> conteo_bigramas = new Dictionary<String, int>();
         private static Dictionary<String, int> conteo_uni_qgramas = new Dictionary<String, int>();
         private static Dictionary<String, int> conteo_bi_qgramas = new Dictionary<String, int>();
         private static int[,] matriz_inserciones = new int[43, 43];
         private static int[,] matriz_eliminaciones = new int[43, 43];
         private static int[,] matriz_sustituciones = new int[43, 43];
         private static int[,] matriz_transposiciones = new int[43, 43];
-        private readonly List<String> encabezado_matriz = new List<String>{ "0", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "á", "é", "í", "ó", "ú", "ñ", "ü", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+        private readonly List<String> encabezado_matriz = new List<String> { "0", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "á", "é", "í", "ó", "ú", "ñ", "ü", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
         /// <summary>
         /// Default Constructor
@@ -33,7 +31,7 @@ namespace CorrectorApp
             CargarConteos();
             CargarMatrices();
         }
-        
+
         public List<String> LimpiarTexto(List<String> corpus)
         {
             //Poner todo el minusculas
@@ -190,7 +188,7 @@ namespace CorrectorApp
                     if (EditDistance(palabraError, palabraDistancia1) == 1)
                     {
                         String operacion = "";
-                        
+
                         int posicionDiferencia = 0;
                         if (palabraError.Count() > palabraDistancia1.Count())
                         {
@@ -234,7 +232,7 @@ namespace CorrectorApp
 
             return palabras;
         }
-        
+
         /// <summary>
         /// Cargar los archivos de frecuencias.
         /// </summary>
@@ -354,59 +352,7 @@ namespace CorrectorApp
             };
             bw2.RunWorkerAsync();
 
-            // Conteo de unigramas de palabras
-            var bw3 = new BackgroundWorker();
-            Boolean finishedBW3 = false;
-            bw3.DoWork += (senderbw3, arg) =>
-            {
-                var unig = File.ReadAllLines(@"conteos_unigramas.csv").ToList();
-
-                if (unig != null)
-                {
-                    foreach (var conteoUnig in unig)
-                    {
-                        if (!String.IsNullOrWhiteSpace(conteoUnig))
-                        {
-                            var conteo = conteoUnig.Split(';');
-
-                            if (!conteo_unigramas.ContainsKey(conteo[0]))
-                            {
-                                conteo_unigramas.Add(conteo[0], Int32.Parse(conteo[1]));
-                            }
-                        }
-                    }
-                }
-                finishedBW3 = true;
-            };
-            bw3.RunWorkerAsync();
-
-            // Conteo de bigramas de palabras
-            var bw4 = new BackgroundWorker();
-            Boolean finishedBW4 = false;
-            bw4.DoWork += (senderbw4, arg) =>
-            {
-                var big = File.ReadAllLines(@"conteos_bigramas.csv").ToList();
-
-                if (big != null)
-                {
-                    foreach (var conteoBig in big)
-                    {
-                        if (!String.IsNullOrWhiteSpace(conteoBig))
-                        {
-                            var conteo = conteoBig.Split(';');
-
-                            if (!conteo_bigramas.ContainsKey(conteo[0]))
-                            {
-                                conteo_bigramas.Add(conteo[0], Int32.Parse(conteo[1]));
-                            }
-                        }
-                    }
-                }
-                finishedBW4 = true;
-            };
-            bw4.RunWorkerAsync();
-
-            while (!finishedBW1 || !finishedBW2 || !finishedBW3 || !finishedBW4)
+            while (!finishedBW1 || !finishedBW2)
             { }
             Console.WriteLine("Finished conteos");
         }
@@ -501,10 +447,10 @@ namespace CorrectorApp
 
             Console.WriteLine("Finished with the matrices");
         }
-  
+
         private Double ObtenerFrecuenciaBigrama(String bigrama)
         {
-            return frec_bigramas.ContainsKey(bigrama) ? frec_bigramas[bigrama] : 0.4;
+            return frec_bigramas.ContainsKey(bigrama) ? frec_bigramas[bigrama] : frec_bigramas["UNK,UNK"];
         }
 
         private Double ObtenerFrecuenciaUnigrama(String unigrama)
@@ -530,20 +476,90 @@ namespace CorrectorApp
         private Double ObtenerProbabilidadMatriz(Tuple<String, String, String, int> tupla)
         {
             // Tuple<Palabra con error, Palabra candidata, Operacion, Posicion>
-            Double prob = 0;
-            double ocurrencias = 0;
-            double conteoBigramaLetra = 0;
+            Double prob = 0.0;
+            Double ocurrencias = 0.0;
+            Double conteoBigramaLetra = 0.0;
+            Double conteoUnigramaLetra = 0.0;
             String caracterX = "";
             String caracterY = "";
 
             switch (tupla.Item3)
             {
                 case "Eliminacion":
+                    if (tupla.Item4 == 0) // Al inicio de la palabra                 
+                    {
+                        /*
+                         * Ejemplo: Palabra con error: rroz, Palabra candidata: arroz, Posición: 0
+                         * X = a, Y = r, bigrama = |,r
+                         */
+                        caracterX = tupla.Item2[0].ToString();
+                        caracterY = tupla.Item1[0].ToString();
+
+                        ocurrencias = matriz_eliminaciones[encabezado_matriz.IndexOf(caracterY), encabezado_matriz.IndexOf(caracterX)];
+                        conteoBigramaLetra = ObtenerConteoBigramaLetra("|" + caracterY);
+                    }
+                    else if(tupla.Item4 + 1 == tupla.Item2.Count()) // Al final de la palabra
+                    {
+                        /*
+                         * Ejemplo: Palabra con error: arro, Palabra candidata: arroz, Posición: 5
+                         * X = z, Y = o, bigrama = o,|
+                         */
+                        caracterX = tupla.Item2[tupla.Item4].ToString();
+                        caracterY = tupla.Item1[tupla.Item4 - 1].ToString();
+
+                        ocurrencias = matriz_eliminaciones[encabezado_matriz.IndexOf(caracterX), encabezado_matriz.IndexOf(caracterY)];
+                        conteoBigramaLetra = ObtenerConteoBigramaLetra(caracterY + "|");
+                    }
+                    else
+                    {
+                        caracterX = tupla.Item2[tupla.Item4].ToString();
+                        caracterY = tupla.Item1[tupla.Item4].ToString();
+
+                        ocurrencias = matriz_eliminaciones[encabezado_matriz.IndexOf(caracterX), encabezado_matriz.IndexOf(caracterY)];
+                        conteoBigramaLetra = ObtenerConteoBigramaLetra(caracterX + caracterY);
+                    }
+                                        
+                    prob = (double)((ocurrencias + 1) / conteoBigramaLetra);
                     break;
+
                 case "Insercion":
+                    if (tupla.Item4 == 0) // Al inicio de la palabra
+                    {
+                        caracterX = tupla.Item1[0].ToString();
+                        caracterY = tupla.Item2[0].ToString();
+
+                        ocurrencias = matriz_inserciones[encabezado_matriz.IndexOf(caracterX), encabezado_matriz.IndexOf(caracterY)];
+                        conteoBigramaLetra = ObtenerConteoBigramaLetra("|" + caracterY);
+                    }
+                    else if (tupla.Item1.Count() == tupla.Item4 + 1) // Al final de la palabra
+                    {
+                        caracterX = tupla.Item1[tupla.Item4].ToString();
+                        caracterY = tupla.Item2[tupla.Item4 - 1].ToString();
+
+                        ocurrencias = matriz_inserciones[encabezado_matriz.IndexOf(caracterX), encabezado_matriz.IndexOf(caracterY)];
+                        conteoBigramaLetra = ObtenerConteoBigramaLetra(caracterY + "|");
+                    }
+                    else
+                    {
+                        caracterX = tupla.Item1[tupla.Item4].ToString();
+                        caracterY = tupla.Item2[tupla.Item4].ToString();
+
+                        ocurrencias = matriz_inserciones[encabezado_matriz.IndexOf(caracterX), encabezado_matriz.IndexOf(caracterY)];
+                        conteoBigramaLetra = ObtenerConteoBigramaLetra(caracterX + caracterY);
+                    }
+                                        
+                    prob = (double)((ocurrencias + 1) / conteoBigramaLetra);
                     break;
+
                 case "Sustitucion":
+                    caracterX = tupla.Item1[tupla.Item4].ToString();
+                    caracterY = tupla.Item2[tupla.Item4].ToString();
+
+                    ocurrencias = matriz_sustituciones[encabezado_matriz.IndexOf(caracterX), encabezado_matriz.IndexOf(caracterY)];
+                    conteoUnigramaLetra = ObtenerConteoUnigramaLetra(caracterX);
+                    prob = (double)((ocurrencias + 1) / conteoUnigramaLetra);
                     break;
+
                 case "Transposicion":
                     caracterX = tupla.Item2[tupla.Item4].ToString();
                     caracterY = tupla.Item2[tupla.Item4 + 1].ToString();
@@ -553,15 +569,15 @@ namespace CorrectorApp
                     prob = (double)((ocurrencias + 1) / conteoBigramaLetra);
                     break;
             }
-            
+
             return prob;
         }
-        
+
         public String ObtenerOracionCorregida(String oracionConErrores)
         {
             string fraseCorregida = "";
-            
-            List<String> oracion = new List<String>();           
+
+            List<String> oracion = new List<String>();
             oracion = oracionConErrores.Split(' ', '\t').ToList();
             String palabra = "";
 
@@ -572,7 +588,7 @@ namespace CorrectorApp
                 if (!PalabraExiste(palabra))
                 {
                     // Buscar las palabras a distancia 1 (candidatos). Tuple<Palabra, Candidato, Operacion, Posicion>
-                    List <Tuple<String, String, String, int>> candidatos = PalabrasDistancia1(palabra);
+                    List<Tuple<String, String, String, int>> candidatos = PalabrasDistancia1(palabra);
                     Dictionary<String, Double> candidatosConProbabilidad = new Dictionary<String, Double>();
 
                     foreach (Tuple<String, String, String, int> tuplaCandidato in candidatos)
@@ -580,7 +596,7 @@ namespace CorrectorApp
                         String candidato = tuplaCandidato.Item2;
                         String palabraAnterior = i == 0 ? "<s>" : oracion[i - 1];
                         String palabraPosterior = i == oracion.Count() - 1 ? "</s>" : oracion[i + 1];
-                        String bigramaAnterior = palabraAnterior + "," + candidato;                        
+                        String bigramaAnterior = palabraAnterior + "," + candidato;
                         String bigramaPosterior = candidato + "," + palabraPosterior;
 
                         Double probUnigramaCandidato = ObtenerFrecuenciaUnigrama(candidato);
@@ -593,7 +609,8 @@ namespace CorrectorApp
                         candidatosConProbabilidad.Add(candidato, probCandidato);
                     }
 
-                    palabra = ObtenerCandidatoMayorProbabilidad(candidatosConProbabilidad);
+                    if (candidatos.Count() > 0)
+                        palabra = ObtenerCandidatoMayorProbabilidad(candidatosConProbabilidad);
                 }
 
                 fraseCorregida += palabra + " ";
