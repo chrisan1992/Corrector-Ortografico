@@ -13,7 +13,9 @@ namespace CorrectorApp
     public partial class UserControl1 : UserControl
     {
         private Corrector corrector;
-        
+        private String oracionCorregida;
+
+
         public UserControl1()
         {
             InitializeComponent();
@@ -22,10 +24,42 @@ namespace CorrectorApp
 
         private void btnCorregir_Click(object sender, EventArgs e)
         {
-            String oracionConErrores = LimpiarOracion(txtOriginal.Text.ToLower());
-            String oracionCorregida = corrector.ObtenerOracionCorregida(oracionConErrores);
+            Loading(1);
+            txtCorregido.Text = "";
+            Application.DoEvents();
 
-            txtCorregido.Text = oracionCorregida;          
+            String oracionConErrores = "";
+            oracionCorregida = "";
+
+            BackgroundWorker bw1 = new BackgroundWorker();
+            bw1.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw1_RunWorkerCompleted);
+            bw1.DoWork += (senderbw1, arg) =>
+            {
+                oracionConErrores = LimpiarOracion(txtOriginal.Text.ToLower()).Trim();
+                oracionCorregida = corrector.ObtenerOracionCorregida(oracionConErrores);
+
+            };
+            bw1.RunWorkerAsync();
+
+            //Loading(0);
+        }
+
+        void bw1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            txtCorregido.Text = oracionCorregida;
+            Loading(0);
+        }
+
+        private void Loading(int i)
+        {
+            if (i == 1)
+            {
+                this.pictureBox1.Visible = true;
+            }
+            else
+            {
+                this.pictureBox1.Visible = false;
+            }
         }
 
         [System.Runtime.InteropServices.DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]

@@ -28,11 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl1));
             this.txtOriginal = new System.Windows.Forms.TextBox();
             this.txtCorregido = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnCorregir = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // txtOriginal
@@ -85,7 +88,7 @@
             this.btnCorregir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCorregir.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCorregir.ForeColor = System.Drawing.Color.White;
-            this.btnCorregir.Location = new System.Drawing.Point(445, 370);
+            this.btnCorregir.Location = new System.Drawing.Point(466, 385);
             this.btnCorregir.Name = "btnCorregir";
             this.btnCorregir.Size = new System.Drawing.Size(142, 50);
             this.btnCorregir.TabIndex = 4;
@@ -94,11 +97,23 @@
             this.btnCorregir.Click += new System.EventHandler(this.btnCorregir_Click);
             this.btnCorregir.Paint += new System.Windows.Forms.PaintEventHandler(this.btnCorregir_Paint);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(-50, 351);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(321, 146);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 6;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Visible = false;
+            // 
             // UserControl1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnCorregir);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -106,6 +121,7 @@
             this.Controls.Add(this.txtOriginal);
             this.Name = "UserControl1";
             this.Size = new System.Drawing.Size(633, 451);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -118,5 +134,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnCorregir;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
