@@ -36,9 +36,9 @@
             this.labelMinimize = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel4 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
@@ -75,6 +75,7 @@
             this.btnConfig.Text = "  Configuración";
             this.btnConfig.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnConfig.UseVisualStyleBackColor = true;
+            this.btnConfig.Visible = false;
             this.btnConfig.Click += new System.EventHandler(this.btnConfig_Click);
             // 
             // btnCorrector
@@ -140,23 +141,6 @@
             this.panel3.Size = new System.Drawing.Size(177, 67);
             this.panel3.TabIndex = 5;
             // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.DodgerBlue;
-            this.panel1.Location = new System.Drawing.Point(176, 60);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(627, 2);
-            this.panel1.TabIndex = 6;
-            // 
-            // panel4
-            // 
-            this.panel4.BackgroundImage = global::CorrectorApp.Properties.Resources.check_318_42159;
-            this.panel4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel4.Location = new System.Drawing.Point(24, 17);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(38, 37);
-            this.panel4.TabIndex = 0;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -168,6 +152,23 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "PLN";
             this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
+            // panel4
+            // 
+            this.panel4.BackgroundImage = global::CorrectorApp.Properties.Resources.check_318_42159;
+            this.panel4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel4.Location = new System.Drawing.Point(24, 17);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(38, 37);
+            this.panel4.TabIndex = 0;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.DodgerBlue;
+            this.panel1.Location = new System.Drawing.Point(176, 60);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(627, 2);
+            this.panel1.TabIndex = 6;
             // 
             // Form1
             // 
